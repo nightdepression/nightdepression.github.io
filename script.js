@@ -44,7 +44,6 @@ const backgroundLayer = document.getElementById('backgroundLayer');
 
 // Функция смены фона
 function setBackground(index) {
-  console.log('Switching background to:', index);
   backgroundLayer.classList.remove('fade-in');
   backgroundLayer.classList.remove('fade-out');
   backgroundLayer.classList.add('fade-out');
