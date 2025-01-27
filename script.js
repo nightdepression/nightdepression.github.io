@@ -205,7 +205,7 @@ function loadTrack(index) {
 
   trackTitle.textContent = track.title;
   trackArtist.textContent = track.artist || '';
-  trackCover.src = track.cover || 'https://via.placeholder.com/60';
+  trackCover.src = track.cover || 'https://t2.genius.com/unsafe/340x340/https%3A%2F%2Fimages.genius.com%2Fdc9cfa81e5a375815702b0dc79324107.1000x1000x1.jpg';
 
   // Если играет, продолжаем
   if (isPlaying) {
