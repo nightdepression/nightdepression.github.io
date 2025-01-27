@@ -135,13 +135,13 @@ const tracks = [
     title: 'По переходам',
     artist: 'f0lk',
     cover: 'https://t2.genius.com/unsafe/340x340/https%3A%2F%2Fimages.genius.com%2F77d7909d5bd0f16c2cdde0805e9830ec.1000x1000x1.jpg',
-    url: 'music/f0lk - Transitions.mp3'
+    url: 'music/f0lk - transitions.mp3'
   },
   {
     title: 'Тысячи',
     artist: 'H8.HOOD',
     cover: 'https://t2.genius.com/unsafe/340x340/https%3A%2F%2Fimages.genius.com%2Fdc9cfa81e5a375815702b0dc79324107.1000x1000x1.jpg',
-    url: 'music/H8.HOOD - Thousands.mp3'
+    url: 'music/H8.HOOD - thousands.mp3'
   },
   {
     title: 'Где ты',
