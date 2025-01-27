@@ -141,7 +141,7 @@ const tracks = [
     title: 'Тысячи',
     artist: 'H8.HOOD',
     cover: 'https://t2.genius.com/unsafe/340x340/https%3A%2F%2Fimages.genius.com%2Fdc9cfa81e5a375815702b0dc79324107.1000x1000x1.jpg',
-    url: 'music/H8.HOOD - thousands.mp3'
+    url: 'music/H8.HOOD - Thousands.mp3'
   },
   {
     title: 'Где ты',
