@@ -64,7 +64,7 @@ function setBackground(index) {
       video.src = backgrounds[index].url;
       video.autoplay = true;
       video.loop = true;
-      video.muted = true; // выключаем звук, если нужен false
+      video.muted = true; // выключаем звук, если нужен false (важно: не будет работать автоплей)
       backgroundLayer.appendChild(video);
     } else {
       backgroundLayer.style.background = `
@@ -89,6 +89,8 @@ changeBackgroundIcon.addEventListener('click', () => {
   setBackground(currentBackgroundIndex);
 });
 
+
+// Ютуб вариант (sucks потому что не доделал)
 // // Массив ID
 // const youtubeIDs = [
 //   'BAu9xtNrS30',
@@ -183,7 +185,7 @@ const volumeFilled = document.getElementById('volumeFilled');
 
 // Создаём один Audio-объект
 const audio = new Audio();
-audio.volume = 0.5;  // стартовая громкость
+audio.volume = 0.3;  // стартовая громкость
 
 // Показать окно плеера по клику
 musicPlayerIcon.addEventListener('click', () => {
