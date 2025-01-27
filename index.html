@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>Riin's Masterpiece?</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+  </head>
+
+  <body>
+    <div id="loader">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Блок для бэка (изображения/видео) метод для хостинга -->
+    <div class="background-layer" id="backgroundLayer">
+    </div>
+
+    <!-- <div class="background-layer" id="backgroundLayer">
+      <div class="youtube-bg">
+        Один iframe, будем менять src
+        <iframe
+          id="bgIframe"
+          src="https://www.youtube.com/embed/VIDEO_ID_1?autoplay=1&mute=1&loop=1&controls=0&playlist=VIDEO_ID_1"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div> -->
+
+    <div class="desktop">
+      <div class="desktop-icon" id="changeBackgroundIcon">
+        <i class="fa-solid fa-image"></i>
+        <span>Сменить фон</span>
+      </div>
+
+      <div class="desktop-icon" id="musicPlayerIcon" style="top: 130px;">
+        <i class="fa-solid fa-music"></i>
+        <span>Music Player</span>
+      </div>
+
+      <!-- Панель задач -->
+      <div class="taskbar">
+        <!-- Кнопка Пуск -->
+        <div class="start-button" id="startButton">
+          <i class="fab fa-windows"></i>
+        </div>
+
+        <!-- Центральные иконки (приложения) -->
+        <div class="center-icons">
+          <div class="icon">
+            <i class="fa-brands fa-chrome"></i>
+          </div>
+          <div class="icon">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div class="icon">
+            <i class="fa-solid fa-calendar"></i>
+          </div>
+        </div>
+
+        <!-- Правые иконки (системный трэй) -->
+        <div class="tray-icons">
+          <div class="icon">
+            <i class="fa-solid fa-volume-high"></i>
+          </div>
+          <div class="icon">
+            <i class="fa-solid fa-wifi"></i>
+          </div>
+          <div class="icon" id="clock">15:37</div>
+        </div>
+      </div>
+
+      <!-- Старт-меню (скрытое) -->
+      <div class="start-menu" id="startMenu">
+        <h2>Меню Пуск</h2>
+        <p>Здесь может быть ваше содержимое...</p>
+      </div>
+
+       <!-- === ФИОЛЕТОВЫЙ ПЛЕЕР === -->
+    <div class="player-window" id="musicWindow" style="display: none;">
+      <!-- Кнопка закрытия окна (в правом верхнем углу) -->
+      <div class="close-btn" id="closeMusicWindow">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
+
+      <div class="player-card">
+        <!-- Верхняя часть: обложка, название трека, артист, лайк, «три точки» -->
+        <div class="player-content">
+          <div class="album-cover">
+            <img src="https://via.placeholder.com/60x60.png?text=Cover" alt="cover" id="trackCover">
+          </div>
+          <div class="track-info">
+            <div class="track-title" id="trackTitle">- Без трека -</div>
+            <div class="track-artist" id="trackArtist"></div>
+          </div>
+          <div class="like-btn"><i class="fa-solid fa-heart"></i></div>
+          <div class="more-btn"><i class="fa-solid fa-ellipsis"></i></div>
+        </div>
+
+        <!-- Кнопки управления -->
+        <div class="controls-row">
+          <i class="fa-solid fa-shuffle" id="shuffleBtn"></i>
+          <i class="fa-solid fa-backward-step" id="prevTrack"></i>
+          <div class="play-btn" id="playPause">
+            <i class="fa-solid fa-play"></i>
+          </div>
+          <i class="fa-solid fa-forward-step" id="nextTrack"></i>
+          <i class="fa-solid fa-repeat" id="repeatBtn"></i>
+        </div>
+
+        <!-- Прогресс трека -->
+        <div class="progress-row">
+          <span class="current-time" id="currentTime">0:00</span>
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-filled" id="progressFilled"></div>
+          </div>
+          <span class="total-time" id="totalTime">0:00</span>
+        </div>
+
+        <!-- Громкость -->
+        <div class="volume-row">
+          <i class="fa-solid fa-volume-high"></i>
+          <div class="volume-bar" id="volumeContainer">
+            <div class="volume-filled" id="volumeFilled"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </body>
+</html>

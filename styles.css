@@ -1,0 +1,409 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+
+/* Лоадер */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease;
+}
+
+#loader.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid #999;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*.background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  transition: opacity 1s ease;
+}
+.background-layer.fade-out {
+  opacity: 0;
+}
+.background-layer.fade-in {
+  opacity: 1;
+}
+
+.youtube-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.youtube-bg iframe {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}*/
+
+/* Метод бэка для хостинга */
+.background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /*Плавная смена непрозрачности*/
+  transition: opacity 1s ease;
+}
+.background-layer.fade-out {
+  opacity: 0;
+}
+.background-layer.fade-in {
+  opacity: 1;
+}
+
+.background-layer video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  или contain
+}
+
+/* Рабочий стол */
+.desktop {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Иконка «Сменить фон» на рабочем столе */
+.desktop-icon {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 70px;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  transition: transform 0.2s ease;
+}
+.desktop-icon i {
+  font-size: 2rem;
+  margin-bottom: 5px;
+  display: block;
+}
+.desktop-icon span {
+  font-size: 0.8rem;
+  display: block;
+  text-shadow: 1px 1px 3px #000;
+}
+.desktop-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Панель задач */
+.taskbar {
+  width: 100%;
+  height: 50px;
+  background-color: rgba(40, 40, 40, 0.85);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 0 10px;
+}
+
+/* Кнопка Пуск */
+.start-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.start-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.start-button i {
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+/* Центральные иконки */
+.center-icons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+.icon:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* Системный трей */
+.tray-icons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-right: 10px;
+}
+
+/* Старт-меню */
+.start-menu {
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  width: 300px;
+  height: 400px;
+  background-color: rgba(30, 30, 30, 0.95);
+  border-radius: 8px;
+  color: #fff;
+  padding: 20px;
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.start-menu.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+.start-menu h2 {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+.start-menu p {
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+}
+
+/* Плеер */
+.player-window {
+  position: absolute;
+  top: 100px;
+  left: 200px;
+  z-index: 1000;
+}
+
+/* Кнопка закрытия в правом верхнем углу */
+.close-btn {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background: #333;
+  color: #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.close-btn:hover {
+  background: #555;
+}
+
+/* Карточка плеера */
+.player-card {
+  width: 340px;
+  background: #3E0068; /* Темно-фиолетовый */
+  border-radius: 15px;
+  padding: 15px 20px;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: "Arial", sans-serif;
+}
+
+/* Верхняя часть: обложка, название, артист, иконки */
+.player-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+.album-cover img {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.track-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.track-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2rem;
+}
+.track-artist {
+  font-weight: 300;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+/* Лайк, меню (три точки) */
+.like-btn, .more-btn {
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.8;
+}
+.like-btn:hover, .more-btn:hover {
+  opacity: 1;
+}
+
+/* Контролы (shuffle, prev, play/pause, next, repeat) */
+.controls-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.2rem;
+}
+.controls-row i {
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.controls-row i:hover {
+  opacity: 1;
+}
+/* Центральная кнопка play/pause в кружке */
+.play-btn {
+  width: 36px;
+  height: 36px;
+  background-color: #FF6FF1;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.play-btn:hover {
+  background-color: #FF54E3;
+}
+
+/* Прогресс трека */
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+}
+.current-time, .total-time {
+  width: 30px;
+  text-align: center;
+  opacity: 0.8;
+}
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  position: relative;
+}
+.progress-filled {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 6px;
+  background: #FF6FF1;
+  border-radius: 3px;
+  width: 0%; /* по умолчанию */
+}
+
+/* Громкость */
+.volume-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+.volume-row i {
+  cursor: pointer;
+}
+.volume-row i:hover {
+  opacity: 1;
+}
+.volume-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 3px;
+  position: relative;
+}
+.volume-filled {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 6px;
+  background: #FF6FF1;
+  border-radius: 3px;
+  width: 50%; /* стартовое значение */
+}
