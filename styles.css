@@ -46,36 +46,6 @@ html, body {
   }
 }
 
-/* Метод бэка для ютуба (kinda sucks) */
-/*.background-layer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  overflow: hidden;
-  transition: opacity 1s ease;
-}
-.background-layer.fade-out {
-  opacity: 0;
-}
-.background-layer.fade-in {
-  opacity: 1;
-}
-
-.youtube-bg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.youtube-bg iframe {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}*/
-
 /* Метод бэка для хостинга */
 .background-layer {
   position: fixed;

@@ -88,47 +88,6 @@ changeBackgroundIcon.addEventListener('click', () => {
   setBackground(currentBackgroundIndex);
 });
 
-
-// Ютуб вариант (sucks потому что не доделал)
-// // Массив ID
-// const youtubeIDs = [
-//   'BAu9xtNrS30',
-//   'ElqnsQPWhDM',
-//   'UOj6be6EEKM'
-// ];
-
-// let currentIndex = 0; // начинаем с 0
-// const bgIframe = document.getElementById('bgIframe');
-// const backgroundLayer = document.getElementById('backgroundLayer');
-// const changeBackgroundIcon = document.getElementById('changeBackgroundIcon');
-
-// function setYouTubeVideo(index) {
-//   backgroundLayer.classList.remove('fade-in');
-//   backgroundLayer.classList.add('fade-out');
-
-//   backgroundLayer.addEventListener('transitionend', handleTransition);
-
-//   function handleTransition() {
-//     backgroundLayer.removeEventListener('transitionend', handleTransition);
-
-//     // Меняем src у iframe
-//     const videoId = youtubeIDs[index];
-//     bgIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&playlist=${videoId}`;
-
-//     // Запускаем fade-in
-//     requestAnimationFrame(() => {
-//       backgroundLayer.classList.remove('fade-out');
-//       backgroundLayer.classList.add('fade-in');
-//     });
-//   }
-// }
-
-// // При клике на иконку «Сменить фон» — следующий индекс
-// changeBackgroundIcon.addEventListener('click', () => {
-//   currentIndex = (currentIndex + 1) % youtubeIDs.length;
-//   setYouTubeVideo(currentIndex);
-// });
-
 // Плеер
 // Массив треков
 const tracks = [
