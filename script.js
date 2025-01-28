@@ -7,13 +7,17 @@ window.addEventListener('load', () => {
 });
 
 // Пуск и часики
-// Элементы для меню "Пуск"
 const startButton = document.getElementById('startButton');
 const startMenu = document.getElementById('startMenu');
 
 startButton.addEventListener('click', () => {
-  startMenu.classList.toggle('active');
+  if (startMenu.classList.contains('show')) {
+    startMenu.classList.remove('show');
+  } else {
+    startMenu.classList.add('show');
+  }
 });
+
 
 const clockElement = document.getElementById('clock');
 
