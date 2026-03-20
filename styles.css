@@ -114,6 +114,52 @@ html, body {
   flex-direction: column;
 }
 
+/* Контекстное меню */
+.context-menu {
+  position: absolute;
+  z-index: 10000;
+  width: 250px;
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  padding: 5px 0;
+  display: none; /* скрыто по умолчанию */
+  color: var(--color-white);
+  font-size: 0.9rem;
+}
+
+.context-menu.show {
+  display: block;
+}
+
+.context-menu-item {
+  padding: 8px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.context-menu-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.context-menu-item i {
+  width: 20px;
+  text-align: center;
+  color: var(--color-text-ccc);
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 5px 0;
+}
+
 /* Иконка «Сменить фон» на рабочем столе */
 .desktop-icon {
   position: absolute;
@@ -491,42 +537,77 @@ html, body {
   line-height: 1.4rem;
 }
 
-/* Плеер */
-.player-window {
+/* Окна Glassmorphism */
+.glass-window {
   position: absolute;
-  top: 100px;
-  left: 200px;
-  z-index: 1000;
+  z-index: 100;
+  background: rgba(40, 40, 40, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--color-white);
+  min-width: 300px;
 }
 
-/* Кнопка закрытия в правом верхнем углу */
-.close-btn {
-  position: absolute;
-  top: -15px;
-  right: -15px;
-  background: var(--color-bg-333);
-  color: var(--color-white);
-  border-radius: 50%;
-  width: 30px;
+.window-header {
   height: 30px;
-  cursor: pointer;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.window-title {
+  padding-left: 10px;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  gap: 8px;
 }
-.close-btn:hover {
-  background: var(--color-bg-555);
+
+.window-controls {
+  display: flex;
+  height: 100%;
+}
+
+.win-btn {
+  width: 45px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.8rem;
+}
+
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.win-btn.close-btn:hover {
+  background: #e81123; /* Красный цвет закрытия Windows 10 */
+}
+
+.window-content {
+  flex: 1;
+  padding: 0;
+  overflow: auto;
 }
 
 /* Карточка плеера */
 .player-card {
   width: 340px;
-  background: var(--color-purple); /* Темно-фиолетовый */
-  border-radius: 15px;
+  background: transparent; /* Убрал фиолетовый для соответствия glassmorphism */
   padding: 15px 20px;
   color: var(--color-white);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   gap: 10px;

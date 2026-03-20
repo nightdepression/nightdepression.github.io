@@ -24,15 +24,108 @@
     <div class="background-layer" id="backgroundLayer">
     </div>
 
-    <div class="desktop">
+    <!-- Context Menu -->
+    <div class="context-menu" id="desktopContextMenu">
+      <div class="context-menu-item" id="contextRefresh">
+        <i class="fa-solid fa-rotate-right"></i> Обновить
+      </div>
+      <div class="context-menu-separator"></div>
+      <div class="context-menu-item">
+        <i class="fa-solid fa-desktop"></i> Вид
+      </div>
+      <div class="context-menu-item">
+        <i class="fa-solid fa-arrow-down-a-z"></i> Сортировка
+      </div>
+      <div class="context-menu-separator"></div>
+      <div class="context-menu-item" id="contextPersonalize">
+        <i class="fa-solid fa-image"></i> Персонализация (Фон)
+      </div>
+    </div>
+
+    <div class="desktop" id="desktopArea">
       <div class="desktop-icon" id="changeBackgroundIcon">
         <i class="fa-solid fa-image"></i>
         <span>Сменить фон</span>
       </div>
 
-      <div class="desktop-icon" id="musicPlayerIcon" style="top: 130px;">
+      <div class="desktop-icon" id="musicPlayerIcon" style="top: 130px; left: 50px;">
         <i class="fa-solid fa-music"></i>
         <span>Music Player</span>
+      </div>
+
+      <div class="desktop-icon" id="aboutMeIcon" style="top: 50px; left: 150px;">
+        <i class="fa-solid fa-user"></i>
+        <span>About Me</span>
+      </div>
+
+      <div class="desktop-icon" id="skillsIcon" style="top: 130px; left: 150px;">
+        <i class="fa-solid fa-code"></i>
+        <span>My Stack</span>
+      </div>
+
+      <div class="desktop-icon" id="terminalIcon" style="top: 210px; left: 50px;">
+        <i class="fa-solid fa-terminal"></i>
+        <span>Terminal</span>
+      </div>
+
+      <!-- About Me Window -->
+      <div class="glass-window" id="aboutMeWindow" style="display: none; top: 150px; left: 300px; width: 350px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-solid fa-user"></i> About Me</div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" style="padding: 20px; text-align: center;">
+          <div style="font-size: 4rem; margin-bottom: 10px;"><i class="fa-solid fa-circle-user"></i></div>
+          <h2>Riin</h2>
+          <p style="margin-top: 10px; color: #ccc;">Developer & Creator</p>
+        </div>
+      </div>
+
+      <!-- My Stack Window -->
+      <div class="glass-window" id="skillsWindow" style="display: none; top: 200px; left: 350px; width: 300px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-solid fa-code"></i> My Stack</div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" style="padding: 20px;">
+          <h3 style="margin-bottom: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Technologies</h3>
+          <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li style="display: flex; align-items: center; gap: 10px;"><i class="fa-brands fa-js" style="color: #f7df1e; font-size: 1.5rem;"></i> JavaScript</li>
+            <li style="display: flex; align-items: center; gap: 10px;"><i class="fa-brands fa-php" style="color: #777bb4; font-size: 1.5rem;"></i> PHP</li>
+            <li style="display: flex; align-items: center; gap: 10px;"><i class="fa-brands fa-laravel" style="color: #ff2d20; font-size: 1.5rem;"></i> Laravel</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Terminal Window -->
+      <div class="glass-window" id="terminalWindow" style="display: none; top: 180px; left: 250px; width: 500px; height: 350px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-solid fa-terminal"></i> Terminal</div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" id="terminalContent" style="background: rgba(0,0,0,0.8); padding: 10px; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; display: flex; flex-direction: column; overflow-y: auto;">
+          <div id="terminalOutput">
+            <div>Microsoft Windows [Version 10.0.19045.3324]</div>
+            <div>(c) Microsoft Corporation. All rights reserved.</div>
+            <br>
+          </div>
+          <div id="terminalInputLine" style="display: flex; align-items: center; margin-top: 5px;">
+            <span style="margin-right: 5px;">C:\Users\Riin&gt;</span>
+            <input type="text" id="terminalInput" style="background: transparent; border: none; outline: none; color: #fff; font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; flex: 1;" autocomplete="off" spellcheck="false">
+          </div>
+        </div>
       </div>
 
       <!-- Панель задач -->
@@ -146,13 +239,17 @@
       </div>
 
        <!-- ФИОЛЕТОВЫЙ ПЛЕЕР (к вопросу почему он фиолетовый, потому что это мой любимый цвет?!) -->
-    <div class="player-window" id="musicWindow" style="display: none;">
-      <!-- Кнопка закрытия окна (в правом верхнем углу) -->
-      <div class="close-btn" id="closeMusicWindow">
-        <i class="fa-solid fa-xmark"></i>
+    <div class="glass-window" id="musicWindow" style="display: none; top: 100px; left: 200px;">
+      <div class="window-header">
+        <div class="window-title"><i class="fa-solid fa-music"></i> Music Player</div>
+        <div class="window-controls">
+          <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+          <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+          <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+        </div>
       </div>
-
-      <div class="player-card">
+      <div class="window-content">
+        <div class="player-card">
         <!-- Верхняя часть: обложка, название трека, артист, лайк, «три точки» -->
         <div class="player-content">
           <div class="album-cover">
