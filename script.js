@@ -87,9 +87,60 @@ function setBackground(index) {
 setBackground(currentBackgroundIndex);
 
 const changeBackgroundIcon = document.getElementById('changeBackgroundIcon');
-changeBackgroundIcon.addEventListener('click', () => {
+function changeBackground() {
   currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
   setBackground(currentBackgroundIndex);
+}
+
+changeBackgroundIcon.addEventListener('click', changeBackground);
+
+// Context Menu Logic
+const desktopArea = document.getElementById('desktopArea');
+const contextMenu = document.getElementById('desktopContextMenu');
+const contextRefresh = document.getElementById('contextRefresh');
+const contextPersonalize = document.getElementById('contextPersonalize');
+
+// Show context menu
+desktopArea.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+
+  // Position the menu
+  let x = e.clientX;
+  let y = e.clientY;
+
+  // Make sure menu doesn't go off-screen
+  if (x + 250 > window.innerWidth) x -= 250;
+  if (y + 150 > window.innerHeight) y -= 150;
+
+  contextMenu.style.left = `${x}px`;
+  contextMenu.style.top = `${y}px`;
+  contextMenu.classList.add('show');
+});
+
+// Hide menu on click elsewhere
+document.addEventListener('click', () => {
+  if (contextMenu.classList.contains('show')) {
+    contextMenu.classList.remove('show');
+  }
+});
+
+// Refresh action
+contextRefresh.addEventListener('click', () => {
+  // Just show loader for a split second to simulate refresh
+  const loader = document.getElementById('loader');
+  loader.style.display = 'flex';
+  loader.classList.remove('hidden');
+  setTimeout(() => {
+    loader.classList.add('hidden');
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 500);
+  }, 300);
+});
+
+// Personalize action
+contextPersonalize.addEventListener('click', () => {
+  changeBackground();
 });
 
 // Плеер
@@ -121,9 +172,174 @@ let isPlaying = false;
 let isShuffle = false;
 let isRepeat = false;
 
-// DOM-элементы плеера
+// Window Dragging Logic
+let zIndexCounter = 100;
+
+function makeDraggable(windowEl) {
+  const header = windowEl.querySelector('.window-header');
+  let isDragging = false;
+  let offsetX, offsetY;
+
+  // Bring to front on mousedown anywhere on window
+  windowEl.addEventListener('mousedown', () => {
+    zIndexCounter++;
+    windowEl.style.zIndex = zIndexCounter;
+  });
+
+  header.addEventListener('mousedown', (e) => {
+    // Prevent dragging if clicking on window controls
+    if (e.target.closest('.window-controls')) return;
+
+    isDragging = true;
+    offsetX = e.clientX - windowEl.offsetLeft;
+    offsetY = e.clientY - windowEl.offsetTop;
+    document.body.style.userSelect = 'none'; // Prevent text selection
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    windowEl.style.left = (e.clientX - offsetX) + 'px';
+    windowEl.style.top = (e.clientY - offsetY) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    document.body.style.userSelect = '';
+  });
+
+  // Window Controls
+  const closeBtn = windowEl.querySelector('.close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      windowEl.style.display = 'none';
+    });
+  }
+
+  const minimizeBtn = windowEl.querySelector('.minimize-btn');
+  if (minimizeBtn) {
+    minimizeBtn.addEventListener('click', () => {
+      windowEl.style.display = 'none'; // Simple minimize behavior for now
+    });
+  }
+
+  const maximizeBtn = windowEl.querySelector('.maximize-btn');
+  if (maximizeBtn) {
+    maximizeBtn.addEventListener('click', () => {
+      if (windowEl.classList.contains('maximized')) {
+        windowEl.classList.remove('maximized');
+        windowEl.style.top = windowEl.dataset.prevTop;
+        windowEl.style.left = windowEl.dataset.prevLeft;
+        windowEl.style.width = windowEl.dataset.prevWidth;
+        windowEl.style.height = windowEl.dataset.prevHeight;
+      } else {
+        // Save current dimensions
+        windowEl.dataset.prevTop = windowEl.style.top || windowEl.offsetTop + 'px';
+        windowEl.dataset.prevLeft = windowEl.style.left || windowEl.offsetLeft + 'px';
+        windowEl.dataset.prevWidth = windowEl.style.width || windowEl.offsetWidth + 'px';
+        windowEl.dataset.prevHeight = windowEl.style.height || windowEl.offsetHeight + 'px';
+
+        windowEl.classList.add('maximized');
+        windowEl.style.top = '0px';
+        windowEl.style.left = '0px';
+        windowEl.style.width = '100vw';
+        // Height should be 100vh - taskbar height (50px)
+        windowEl.style.height = 'calc(100vh - 50px)';
+      }
+    });
+  }
+}
+
+// Initialize dragging for all glass windows
+document.querySelectorAll('.glass-window').forEach(makeDraggable);
+
+// Show window function
+function openWindow(windowEl) {
+  windowEl.style.display = 'flex';
+  zIndexCounter++;
+  windowEl.style.zIndex = zIndexCounter;
+}
+
+// Windows
+const aboutMeWindow = document.getElementById('aboutMeWindow');
+const skillsWindow = document.getElementById('skillsWindow');
 const musicWindow = document.getElementById('musicWindow');
-const closeMusicWindow = document.getElementById('closeMusicWindow');
+const terminalWindow = document.getElementById('terminalWindow');
+
+// Icons
+const aboutMeIcon = document.getElementById('aboutMeIcon');
+const skillsIcon = document.getElementById('skillsIcon');
+const terminalIcon = document.getElementById('terminalIcon');
+
+// Icon Clicks
+aboutMeIcon.addEventListener('click', () => openWindow(aboutMeWindow));
+skillsIcon.addEventListener('click', () => openWindow(skillsWindow));
+terminalIcon.addEventListener('click', () => {
+  openWindow(terminalWindow);
+  document.getElementById('terminalInput').focus();
+});
+
+// Terminal Logic
+const terminalInput = document.getElementById('terminalInput');
+const terminalOutput = document.getElementById('terminalOutput');
+const terminalContent = document.getElementById('terminalContent');
+
+terminalInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const cmd = terminalInput.value.trim();
+    const cmdLower = cmd.toLowerCase();
+
+    // Echo command
+    const promptLine = document.createElement('div');
+    const promptPrefix = document.createElement('span');
+    promptPrefix.textContent = 'C:\\Users\\Riin> ';
+    promptLine.appendChild(promptPrefix);
+    const cmdText = document.createTextNode(cmd);
+    promptLine.appendChild(cmdText);
+    terminalOutput.appendChild(promptLine);
+
+    // Process command
+    if (cmdLower === 'help') {
+      appendOutput('Available commands:');
+      appendOutput('  help   - Show this help message');
+      appendOutput('  clear  - Clear the terminal screen');
+      appendOutput('  whoami - Display current user');
+      appendOutput('  date   - Show current date and time');
+      appendOutput('  echo   - Print text to the terminal');
+    } else if (cmdLower === 'clear') {
+      terminalOutput.innerHTML = '';
+    } else if (cmdLower === 'whoami') {
+      appendOutput('Riin');
+    } else if (cmdLower === 'date') {
+      appendOutput(new Date().toString());
+    } else if (cmdLower.startsWith('echo ')) {
+      appendOutput(cmd.substring(5));
+    } else if (cmdLower !== '') {
+      appendOutput(`'${cmd}' is not recognized as an internal or external command, operable program or batch file.`);
+    }
+
+    // Scroll to bottom
+    terminalContent.scrollTop = terminalContent.scrollHeight;
+
+    // Clear input
+    terminalInput.value = '';
+
+    // Reattach input line at the bottom
+    terminalContent.appendChild(document.getElementById('terminalInputLine'));
+  }
+});
+
+function appendOutput(text) {
+  const line = document.createElement('div');
+  line.textContent = text;
+  terminalOutput.appendChild(line);
+}
+
+// Focus input when clicking anywhere in terminal
+terminalContent.addEventListener('click', () => {
+  terminalInput.focus();
+});
+
+// DOM-элементы плеера
 const musicPlayerIcon = document.getElementById('musicPlayerIcon');
 
 const trackTitle = document.getElementById('trackTitle');
@@ -151,15 +367,8 @@ audio.volume = 0.3;  // стартовая громкость
 
 // Показать окно плеера по клику
 musicPlayerIcon.addEventListener('click', () => {
-  musicWindow.style.display = 'block';
+  openWindow(musicWindow);
   loadTrack(currentTrackIndex);
-});
-
-// Закрыть окно плеера
-closeMusicWindow.addEventListener('click', () => {
-  musicWindow.style.display = 'none';
-  // Если нужно остановить трек, нужно убрать коммент ниже
-  // audio.pause();
 });
 
 // Загрузить трек
