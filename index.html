@@ -37,13 +37,19 @@
         <i class="fa-solid fa-arrow-down-a-z"></i> Сортировка
       </div>
       <div class="context-menu-separator"></div>
+      <div class="context-menu-item" id="contextCreateDoc">
+        <i class="fa-solid fa-file-lines"></i> Создать -> Текстовый документ
+      </div>
+      <div class="context-menu-separator"></div>
       <div class="context-menu-item" id="contextPersonalize">
         <i class="fa-solid fa-image"></i> Персонализация (Фон)
       </div>
     </div>
 
     <div class="desktop" id="desktopArea">
-      <div class="desktop-icon" id="changeBackgroundIcon">
+      <!-- Dynamically created documents will be appended here -->
+
+      <div class="desktop-icon" id="changeBackgroundIcon" style="top: 50px; left: 50px;">
         <i class="fa-solid fa-image"></i>
         <span>Сменить фон</span>
       </div>
@@ -63,9 +69,149 @@
         <span>My Stack</span>
       </div>
 
-      <div class="desktop-icon" id="terminalIcon" style="top: 210px; left: 50px;">
+      <div class="desktop-icon" id="terminalIcon" style="top: 290px; left: 50px;">
         <i class="fa-solid fa-terminal"></i>
         <span>Terminal</span>
+      </div>
+
+      <div class="desktop-icon" id="browserIcon" style="top: 50px; left: 250px;">
+        <i class="fa-brands fa-edge"></i>
+        <span>Browser</span>
+      </div>
+
+      <div class="desktop-icon" id="calcIcon" style="top: 130px; left: 250px;">
+        <i class="fa-solid fa-calculator"></i>
+        <span>Calculator</span>
+      </div>
+
+      <div class="desktop-icon" id="contactsIcon" style="top: 210px; left: 150px;">
+        <i class="fa-solid fa-address-book"></i>
+        <span>Contacts</span>
+      </div>
+
+      <!-- Notepad Window Template (hidden) -->
+      <div class="glass-window" id="notepadTemplate" style="display: none; top: 150px; left: 200px; width: 500px; height: 400px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-solid fa-file-lines"></i> <span class="doc-title">Notepad</span></div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" style="display: flex; flex-direction: column; background: #fff;">
+          <div style="background: #f1f1f1; padding: 5px; border-bottom: 1px solid #ccc; font-size: 0.8rem; color: #333;">
+             <span style="margin-right: 15px; cursor: pointer;">File</span>
+             <span style="margin-right: 15px; cursor: pointer;">Edit</span>
+             <span style="margin-right: 15px; cursor: pointer;">Format</span>
+             <span style="cursor: pointer;">View</span>
+          </div>
+          <textarea class="notepad-textarea" style="flex: 1; border: none; resize: none; padding: 10px; font-family: 'Courier New', Courier, monospace; outline: none;"></textarea>
+        </div>
+      </div>
+
+      <!-- Browser Window -->
+      <div class="glass-window" id="browserWindow" style="display: none; top: 100px; left: 150px; width: 600px; height: 400px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-brands fa-edge"></i> Web Browser</div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" style="display: flex; flex-direction: column; background: #fff;">
+          <div style="background: #f1f1f1; padding: 5px; display: flex; align-items: center; gap: 5px; border-bottom: 1px solid #ccc; color: #333;">
+            <i class="fa-solid fa-arrow-left" style="padding: 5px; cursor: pointer;"></i>
+            <i class="fa-solid fa-arrow-right" style="padding: 5px; cursor: pointer; color: #aaa;"></i>
+            <i class="fa-solid fa-rotate-right" style="padding: 5px; cursor: pointer;"></i>
+            <div style="flex: 1; background: #fff; border-radius: 15px; padding: 5px 15px; border: 1px solid #ddd; font-size: 0.85rem; display: flex; align-items: center;">
+              <i class="fa-solid fa-lock" style="font-size: 0.7rem; color: #4caf50; margin-right: 5px;"></i>
+              https://github.com/nightdepression
+            </div>
+          </div>
+          <div style="flex: 1; display: flex; justify-content: center; align-items: center; color: #333;">
+            <div style="text-align: center;">
+               <h2>Riin's GitHub</h2>
+               <p style="margin-top: 10px; color: #666;">View my repositories and projects here!</p>
+               <a href="https://github.com/nightdepression" target="_blank" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #333; color: #fff; text-decoration: none; border-radius: 5px;">Open in real browser</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculator Window -->
+      <div class="glass-window" id="calcWindow" style="display: none; top: 120px; left: 550px; width: 300px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-solid fa-calculator"></i> Calculator</div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" style="padding: 15px;">
+          <div id="calcDisplay" style="background: rgba(0,0,0,0.3); border-radius: 5px; padding: 15px; font-size: 2rem; text-align: right; margin-bottom: 15px; min-height: 60px; overflow: hidden; white-space: nowrap;">0</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            <button class="calc-btn" onclick="calcAction('C')">C</button>
+            <button class="calc-btn" onclick="calcAction('±')">±</button>
+            <button class="calc-btn" onclick="calcAction('%')">%</button>
+            <button class="calc-btn op" onclick="calcAction('/')">÷</button>
+            <button class="calc-btn" onclick="calcAction('7')">7</button>
+            <button class="calc-btn" onclick="calcAction('8')">8</button>
+            <button class="calc-btn" onclick="calcAction('9')">9</button>
+            <button class="calc-btn op" onclick="calcAction('*')">×</button>
+            <button class="calc-btn" onclick="calcAction('4')">4</button>
+            <button class="calc-btn" onclick="calcAction('5')">5</button>
+            <button class="calc-btn" onclick="calcAction('6')">6</button>
+            <button class="calc-btn op" onclick="calcAction('-')">-</button>
+            <button class="calc-btn" onclick="calcAction('1')">1</button>
+            <button class="calc-btn" onclick="calcAction('2')">2</button>
+            <button class="calc-btn" onclick="calcAction('3')">3</button>
+            <button class="calc-btn op" onclick="calcAction('+')">+</button>
+            <button class="calc-btn zero" onclick="calcAction('0')" style="grid-column: span 2;">0</button>
+            <button class="calc-btn" onclick="calcAction('.')">.</button>
+            <button class="calc-btn eq" onclick="calcAction('=')">=</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacts Window -->
+      <div class="glass-window" id="contactsWindow" style="display: none; top: 150px; left: 400px; width: 320px;">
+        <div class="window-header">
+          <div class="window-title"><i class="fa-solid fa-address-book"></i> Contacts</div>
+          <div class="window-controls">
+            <div class="win-btn minimize-btn"><i class="fa-solid fa-minus"></i></div>
+            <div class="win-btn maximize-btn"><i class="fa-regular fa-square"></i></div>
+            <div class="win-btn close-btn"><i class="fa-solid fa-xmark"></i></div>
+          </div>
+        </div>
+        <div class="window-content" style="padding: 20px;">
+          <h3 style="margin-bottom: 15px; text-align: center;">Get in Touch</h3>
+          <div style="display: flex; flex-direction: column; gap: 15px;">
+            <a href="https://t.me/nightdepression" target="_blank" style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; text-decoration: none; color: white; transition: background 0.2s;">
+              <i class="fa-brands fa-telegram" style="font-size: 2rem; color: #2ea6ff;"></i>
+              <div>
+                <div style="font-weight: bold;">Telegram</div>
+                <div style="font-size: 0.8rem; color: #ccc;">@nightdepression</div>
+              </div>
+            </a>
+            <a href="mailto:example@example.com" style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; text-decoration: none; color: white; transition: background 0.2s;">
+              <i class="fa-solid fa-envelope" style="font-size: 2rem; color: #ea4335;"></i>
+              <div>
+                <div style="font-weight: bold;">Email</div>
+                <div style="font-size: 0.8rem; color: #ccc;">Send a message</div>
+              </div>
+            </a>
+            <a href="https://github.com/nightdepression" target="_blank" style="display: flex; align-items: center; gap: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px; text-decoration: none; color: white; transition: background 0.2s;">
+              <i class="fa-brands fa-github" style="font-size: 2rem; color: #fff;"></i>
+              <div>
+                <div style="font-weight: bold;">GitHub</div>
+                <div style="font-size: 0.8rem; color: #ccc;">View Profile</div>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
 
       <!-- About Me Window -->
@@ -144,19 +290,19 @@
               <div class="pinned-title">Закрепленные</div>
               <div class="pinned-apps">
                 <!-- Плитки -->
-                <div class="tile">
-                  <i class="fa-brands fa-microsoft"></i>
-                  <span>MS Office</span>
+                <div class="tile" id="startTerminal">
+                  <i class="fa-solid fa-terminal"></i>
+                  <span>Terminal</span>
                 </div>
-                <div class="tile">
-                  <i class="fa-solid fa-envelope"></i>
-                  <span>Mail</span>
+                <div class="tile" id="startAbout">
+                  <i class="fa-solid fa-user"></i>
+                  <span>About Me</span>
                 </div>
-                <div class="tile">
-                  <i class="fa-brands fa-chrome"></i>
-                  <span>Chrome</span>
+                <div class="tile" id="startSkills">
+                  <i class="fa-solid fa-code"></i>
+                  <span>Skills</span>
                 </div>
-                <div class="tile">
+                <div class="tile" id="startMusic">
                   <i class="fa-solid fa-music"></i>
                   <span>Music Player</span>
                 </div>
@@ -215,15 +361,7 @@
 
         <!-- Центральные иконки (приложения) -->
         <div class="center-icons">
-          <div class="icon">
-            <i class="fa-brands fa-chrome"></i>
-          </div>
-          <div class="icon">
-            <i class="fa-solid fa-envelope"></i>
-          </div>
-          <div class="icon">
-            <i class="fa-solid fa-calendar"></i>
-          </div>
+          <!-- Dynamically populated by JS based on open windows -->
         </div>
 
         <!-- Правые иконки (системный трэй) -->

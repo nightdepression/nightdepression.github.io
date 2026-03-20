@@ -99,6 +99,11 @@ const desktopArea = document.getElementById('desktopArea');
 const contextMenu = document.getElementById('desktopContextMenu');
 const contextRefresh = document.getElementById('contextRefresh');
 const contextPersonalize = document.getElementById('contextPersonalize');
+const contextCreateDoc = document.getElementById('contextCreateDoc');
+
+// Keep track of right-click position for new doc
+let lastRightClickX = 0;
+let lastRightClickY = 0;
 
 // Show context menu
 desktopArea.addEventListener('contextmenu', (e) => {
@@ -108,9 +113,12 @@ desktopArea.addEventListener('contextmenu', (e) => {
   let x = e.clientX;
   let y = e.clientY;
 
+  lastRightClickX = x;
+  lastRightClickY = y;
+
   // Make sure menu doesn't go off-screen
   if (x + 250 > window.innerWidth) x -= 250;
-  if (y + 150 > window.innerHeight) y -= 150;
+  if (y + 200 > window.innerHeight) y -= 200;
 
   contextMenu.style.left = `${x}px`;
   contextMenu.style.top = `${y}px`;
@@ -141,6 +149,48 @@ contextRefresh.addEventListener('click', () => {
 // Personalize action
 contextPersonalize.addEventListener('click', () => {
   changeBackground();
+});
+
+// Create Document action
+let docCounter = 1;
+contextCreateDoc.addEventListener('click', () => {
+  const docName = `Новый текстовый документ (${docCounter}).txt`;
+  docCounter++;
+
+  // Create icon
+  const newIcon = document.createElement('div');
+  newIcon.className = 'desktop-icon dynamic-doc';
+  newIcon.style.top = `${lastRightClickY}px`;
+  newIcon.style.left = `${lastRightClickX}px`;
+
+  const iconImg = document.createElement('i');
+  iconImg.className = 'fa-solid fa-file-lines';
+  newIcon.appendChild(iconImg);
+
+  const iconText = document.createElement('span');
+  iconText.textContent = docName;
+  newIcon.appendChild(iconText);
+
+  desktopArea.appendChild(newIcon);
+
+  // Clone Notepad template to create unique window
+  const notepadTemplate = document.getElementById('notepadTemplate');
+  const newNotepad = notepadTemplate.cloneNode(true);
+  const newId = `notepad_${docCounter}`;
+  newNotepad.id = newId;
+  newNotepad.querySelector('.doc-title').textContent = docName;
+
+  // Append to body (or desktop)
+  document.querySelector('.desktop').appendChild(newNotepad);
+
+  // Make it draggable
+  makeDraggable(newNotepad);
+
+  // Bind double click to open this specific document
+  addDoubleClickAction(newIcon, () => {
+    openWindow(newNotepad);
+    newNotepad.querySelector('textarea').focus();
+  });
 });
 
 // Плеер
@@ -185,6 +235,10 @@ function makeDraggable(windowEl) {
     zIndexCounter++;
     windowEl.style.zIndex = zIndexCounter;
   });
+  windowEl.addEventListener('touchstart', () => {
+    zIndexCounter++;
+    windowEl.style.zIndex = zIndexCounter;
+  }, { passive: true });
 
   header.addEventListener('mousedown', (e) => {
     // Prevent dragging if clicking on window controls
@@ -196,13 +250,35 @@ function makeDraggable(windowEl) {
     document.body.style.userSelect = 'none'; // Prevent text selection
   });
 
+  header.addEventListener('touchstart', (e) => {
+    if (e.target.closest('.window-controls')) return;
+    isDragging = true;
+    const touch = e.touches[0];
+    offsetX = touch.clientX - windowEl.offsetLeft;
+    offsetY = touch.clientY - windowEl.offsetTop;
+    document.body.style.userSelect = 'none';
+  }, { passive: true });
+
   document.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
     windowEl.style.left = (e.clientX - offsetX) + 'px';
     windowEl.style.top = (e.clientY - offsetY) + 'px';
   });
 
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault(); // Prevent scrolling while dragging
+    const touch = e.touches[0];
+    windowEl.style.left = (touch.clientX - offsetX) + 'px';
+    windowEl.style.top = (touch.clientY - offsetY) + 'px';
+  }, { passive: false });
+
   document.addEventListener('mouseup', () => {
+    isDragging = false;
+    document.body.style.userSelect = '';
+  });
+
+  document.addEventListener('touchend', () => {
     isDragging = false;
     document.body.style.userSelect = '';
   });
@@ -212,6 +288,8 @@ function makeDraggable(windowEl) {
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
       windowEl.style.display = 'none';
+      windowEl.classList.remove('is-open'); // Mark as actually closed
+      updateTaskbar();
     });
   }
 
@@ -219,6 +297,8 @@ function makeDraggable(windowEl) {
   if (minimizeBtn) {
     minimizeBtn.addEventListener('click', () => {
       windowEl.style.display = 'none'; // Simple minimize behavior for now
+      // Don't remove 'is-open', just let display be none, so taskbar knows it's minimized
+      updateTaskbar();
     });
   }
 
@@ -252,31 +332,195 @@ function makeDraggable(windowEl) {
 // Initialize dragging for all glass windows
 document.querySelectorAll('.glass-window').forEach(makeDraggable);
 
+// Taskbar icons container
+const centerIconsContainer = document.querySelector('.center-icons');
+
+// Helper function to update taskbar based on open windows
+function updateTaskbar() {
+  centerIconsContainer.innerHTML = '';
+  const openWindows = Array.from(document.querySelectorAll('.glass-window')).filter(win => win.classList.contains('is-open'));
+
+  openWindows.forEach(win => {
+    // Determine icon based on window ID or content
+    let iconClass = 'fa-solid fa-window-maximize';
+    if (win.id === 'musicWindow') iconClass = 'fa-solid fa-music';
+    else if (win.id === 'aboutMeWindow') iconClass = 'fa-solid fa-user';
+    else if (win.id === 'skillsWindow') iconClass = 'fa-solid fa-code';
+    else if (win.id === 'terminalWindow') iconClass = 'fa-solid fa-terminal';
+
+    const taskbarIcon = document.createElement('div');
+    taskbarIcon.className = 'icon taskbar-app-icon active-app';
+    taskbarIcon.innerHTML = `<i class="${iconClass}"></i>`;
+
+    // Clicking taskbar icon toggles window
+    taskbarIcon.addEventListener('click', () => {
+      // If it's the topmost window, minimize it
+      if (win.style.display !== 'none' && win.style.zIndex == zIndexCounter) {
+        win.style.display = 'none';
+        taskbarIcon.classList.remove('active-app');
+      } else {
+        // Bring to front and show
+        win.style.display = 'flex';
+        zIndexCounter++;
+        win.style.zIndex = zIndexCounter;
+        taskbarIcon.classList.add('active-app');
+      }
+    });
+
+    // If it's currently hidden (minimized), don't show the active underline
+    if (win.style.display === 'none') {
+        taskbarIcon.classList.remove('active-app');
+    }
+
+    centerIconsContainer.appendChild(taskbarIcon);
+  });
+}
+
 // Show window function
 function openWindow(windowEl) {
   windowEl.style.display = 'flex';
+  windowEl.classList.add('is-open');
   zIndexCounter++;
   windowEl.style.zIndex = zIndexCounter;
+  updateTaskbar();
 }
+
+// Start menu bindings
+document.getElementById('startTerminal').addEventListener('click', () => {
+  openWindow(terminalWindow);
+  document.getElementById('terminalInput').focus();
+  document.getElementById('startMenu').classList.remove('show');
+});
+document.getElementById('startAbout').addEventListener('click', () => {
+  openWindow(aboutMeWindow);
+  document.getElementById('startMenu').classList.remove('show');
+});
+document.getElementById('startSkills').addEventListener('click', () => {
+  openWindow(skillsWindow);
+  document.getElementById('startMenu').classList.remove('show');
+});
+document.getElementById('startMusic').addEventListener('click', () => {
+  openWindow(musicWindow);
+  loadTrack(currentTrackIndex);
+  document.getElementById('startMenu').classList.remove('show');
+});
 
 // Windows
 const aboutMeWindow = document.getElementById('aboutMeWindow');
 const skillsWindow = document.getElementById('skillsWindow');
 const musicWindow = document.getElementById('musicWindow');
 const terminalWindow = document.getElementById('terminalWindow');
+const browserWindow = document.getElementById('browserWindow');
+const calcWindow = document.getElementById('calcWindow');
+const contactsWindow = document.getElementById('contactsWindow');
 
 // Icons
 const aboutMeIcon = document.getElementById('aboutMeIcon');
 const skillsIcon = document.getElementById('skillsIcon');
 const terminalIcon = document.getElementById('terminalIcon');
+const browserIcon = document.getElementById('browserIcon');
+const calcIcon = document.getElementById('calcIcon');
+const contactsIcon = document.getElementById('contactsIcon');
+
+// Helper for touch-friendly double clicks
+function addDoubleClickAction(element, callback) {
+  element.addEventListener('dblclick', callback);
+
+  let lastTap = 0;
+  element.addEventListener('touchend', (e) => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    if (tapLength < 500 && tapLength > 0) {
+      e.preventDefault();
+      callback();
+    }
+    lastTap = currentTime;
+  });
+}
 
 // Icon Clicks
-aboutMeIcon.addEventListener('click', () => openWindow(aboutMeWindow));
-skillsIcon.addEventListener('click', () => openWindow(skillsWindow));
-terminalIcon.addEventListener('click', () => {
+addDoubleClickAction(aboutMeIcon, () => openWindow(aboutMeWindow));
+addDoubleClickAction(skillsIcon, () => openWindow(skillsWindow));
+addDoubleClickAction(terminalIcon, () => {
   openWindow(terminalWindow);
   document.getElementById('terminalInput').focus();
 });
+addDoubleClickAction(browserIcon, () => openWindow(browserWindow));
+addDoubleClickAction(calcIcon, () => openWindow(calcWindow));
+addDoubleClickAction(contactsIcon, () => openWindow(contactsWindow));
+
+// Calculator Logic
+let calcDisplayValue = '0';
+let calcFirstOperand = null;
+let calcWaitingForSecondOperand = false;
+let calcOperator = null;
+
+const calcDisplay = document.getElementById('calcDisplay');
+
+function updateCalcDisplay() {
+  calcDisplay.textContent = calcDisplayValue;
+}
+
+function calcAction(val) {
+  if (['+', '-', '*', '/'].includes(val)) {
+    handleOperator(val);
+  } else if (val === '=') {
+    handleOperator(val);
+  } else if (val === 'C') {
+    calcDisplayValue = '0';
+    calcFirstOperand = null;
+    calcWaitingForSecondOperand = false;
+    calcOperator = null;
+  } else if (val === '±') {
+    calcDisplayValue = String(-parseFloat(calcDisplayValue));
+  } else if (val === '%') {
+    calcDisplayValue = String(parseFloat(calcDisplayValue) / 100);
+  } else if (val === '.') {
+    if (!calcDisplayValue.includes('.')) {
+      calcDisplayValue += '.';
+    }
+  } else {
+    // Digits
+    if (calcWaitingForSecondOperand) {
+      calcDisplayValue = val;
+      calcWaitingForSecondOperand = false;
+    } else {
+      calcDisplayValue = calcDisplayValue === '0' ? val : calcDisplayValue + val;
+    }
+  }
+  updateCalcDisplay();
+}
+
+function handleOperator(nextOperator) {
+  const inputValue = parseFloat(calcDisplayValue);
+
+  if (calcOperator && calcWaitingForSecondOperand) {
+    calcOperator = nextOperator;
+    return;
+  }
+
+  if (calcFirstOperand == null && !isNaN(inputValue)) {
+    calcFirstOperand = inputValue;
+  } else if (calcOperator) {
+    const result = calculate(calcFirstOperand, inputValue, calcOperator);
+    calcDisplayValue = String(Number(result.toFixed(7))); // Fix floating point issues
+    calcFirstOperand = result;
+  }
+
+  calcWaitingForSecondOperand = true;
+  calcOperator = nextOperator;
+}
+
+function calculate(first, second, operator) {
+  if (operator === '+') return first + second;
+  if (operator === '-') return first - second;
+  if (operator === '*') return first * second;
+  if (operator === '/') return first / second;
+  return second;
+}
+
+// Ensure globally accessible
+window.calcAction = calcAction;
 
 // Terminal Logic
 const terminalInput = document.getElementById('terminalInput');
@@ -366,7 +610,7 @@ const audio = new Audio();
 audio.volume = 0.3;  // стартовая громкость
 
 // Показать окно плеера по клику
-musicPlayerIcon.addEventListener('click', () => {
+addDoubleClickAction(musicPlayerIcon, () => {
   openWindow(musicWindow);
   loadTrack(currentTrackIndex);
 });

@@ -114,6 +114,33 @@ html, body {
   flex-direction: column;
 }
 
+/* Калькулятор кнопочки */
+.calc-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-size: 1.2rem;
+  padding: 15px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.calc-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+.calc-btn.op {
+  background: rgba(255,111,241,0.2);
+}
+.calc-btn.op:hover {
+  background: rgba(255,111,241,0.4);
+}
+.calc-btn.eq {
+  background: var(--color-pink);
+}
+.calc-btn.eq:hover {
+  background: var(--color-pink-hover);
+}
+
 /* Контекстное меню */
 .context-menu {
   position: absolute;
@@ -476,7 +503,7 @@ html, body {
 /* Центральные иконки */
 .center-icons {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   flex: 1;
@@ -491,11 +518,24 @@ html, body {
   font-size: 1.2rem;
   border-radius: 8px;
   cursor: pointer;
+  position: relative;
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 .icon:hover {
   background-color: var(--color-hover-white20);
   transform: scale(1.1);
+}
+
+.taskbar-app-icon.active-app::after {
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15px;
+  height: 3px;
+  background-color: var(--color-pink);
+  border-radius: 2px;
 }
 
 /* Системный трей */
