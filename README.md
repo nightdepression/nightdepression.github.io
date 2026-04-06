@@ -30,5 +30,5 @@
 
 ---
 
-**Автор**: [Riin](https://github.com/nightdepression)  
+**Авторы**: [Riin](https://github.com/nightdepression) and [Jules](https://jules.google/)
 **Лицензия**: MIT
